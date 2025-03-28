@@ -108,6 +108,10 @@ class App {
 
     // Handling clicks on map
     this.#map.on('click', this._showForm.bind(this));
+
+    this.#workouts.forEach(work => {
+      this._renderWorkoutMarker(work);
+    });
   }
 
   _showForm(e) {
@@ -283,7 +287,7 @@ class App {
       },
     });
 
-    workout.click();
+    //workout.click();
   }
 
   _setLocalStorage() {
@@ -298,6 +302,11 @@ class App {
     this.#workouts = data;
 
     this.#workouts.forEach(workout => this._renderWorkout(workout));
+  }
+
+  reset() {
+    localStorage.removeItem('workouts');
+    location.reload();
   }
 }
 
