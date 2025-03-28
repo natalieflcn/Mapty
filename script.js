@@ -67,6 +67,7 @@ const inputElevation = document.querySelector('.form__input--elevation');
 
 class App {
   #map;
+  #mapZoom = 16;
   #mapEvent;
   #workouts = [];
 
@@ -91,7 +92,7 @@ class App {
   _loadMap(position) {
     const { latitude, longitude } = position.coords;
 
-    this.#map = L.map('map').setView([latitude, longitude], 16);
+    this.#map = L.map('map').setView([latitude, longitude], this.#mapZoom);
 
     L.tileLayer('https://tile.openstreetmap.bzh/ca/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -259,7 +260,19 @@ class App {
 
   _moveToPopup(e) {
     const workoutEl = e.target.closest('.workout');
-    console.log(workoutEl);
+
+    if (!workoutEl) return;
+
+    const workout = this.#workouts.find(
+      workout => workout.id === workoutEl.dataset.id
+    );
+
+    this.#map.setView(workout.coords, this.#mapZoom, {
+      animate: true,
+      pan: {
+        duration: 1,
+      },
+    });
   }
 }
 
